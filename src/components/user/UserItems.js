@@ -17,4 +17,5 @@ const UserItems = (props) => {
     </div>
   );
 };
+
 export default UserItems;

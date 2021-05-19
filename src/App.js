@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
-import UserItems from "./components/layout/user/UserItems";
+import User from "./components/user/Users";
 class App extends Component {
   render() {
     return (
       <div>
         <Navbar />
-        <UserItems />
+        <div className='container'>
+          <User />
+        </div>
       </div>
     );
   }

@@ -2,7 +2,8 @@ import React, { Fragment, Component } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
-import User from "./components/user/Users";
+import Users from "./components/user/Users";
+import User from "./components/user/User";
 import axios from "axios";
 import Search from "./components/user/Search";
 import Alert from "./components/layout/Alert";
@@ -10,6 +11,7 @@ import About from "./components/pages/About";
 class App extends Component {
   state = {
     users: [],
+    user: {},
     loading: false,
     alert: null,
   };
@@ -27,6 +29,14 @@ class App extends Component {
       `https://api.github.com/search/users?q=${text}&client_id=${"dd3f8df5a995af1ff36b"}&client_secret=${"127650d7358b381a217e7ec117b28e1772bad25d"}`
     );
     this.setState({ users: res.data.items, loading: false });
+  };
+  // get single Users
+  getUser = async (username) => {
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}?&client_id=${"dd3f8df5a995af1ff36b"}&client_secret=${"127650d7358b381a217e7ec117b28e1772bad25d"}`
+    );
+    this.setState({ user: res.data, loading: false });
   };
   clearUsers = () => {
     this.setState({ users: [], loading: false });
@@ -54,7 +64,7 @@ class App extends Component {
                       showClear={this.state.users.length > 0 ? true : false}
                       setAlert={this.setAlert}
                     />
-                    <User
+                    <Users
                       loading={this.state.loading}
                       users={this.state.users}
                     />
@@ -62,6 +72,18 @@ class App extends Component {
                 )}
               ></Route>
               <Route exact path='/about' component={About}></Route>
+              <Route
+                exact
+                path='/user/:login'
+                render={(props) => (
+                  <User
+                    {...props}
+                    getUser={this.getUser}
+                    user={this.state.user}
+                    loading={this.state.loading}
+                  />
+                )}
+              ></Route>
             </Switch>
           </div>
         </div>
